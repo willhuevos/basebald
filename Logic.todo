@@ -1,0 +1,11 @@
+TODO:
+    ☐ hit chance logic
+    ✔ 'ball' logic @done(24-03-07 10:21)
+    ☐ player skills
+    ☐ separate pitchers?
+    ☐ base running logic
+    ☐ position logic
+
+ISSUES:
+    ✘ players on x @cancelled(24-03-07 10:21)
+when playing, pass in the batter object (and pitcher?)
