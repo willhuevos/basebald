@@ -1,3 +1,3 @@
 # basebald
 
-basebald is a game of luck to dissappoint skilled players
+basebald is a game of luck to disappoint skilled players
