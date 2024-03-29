@@ -48,7 +48,7 @@ class Game:
         }
 
     def advance_bases(self):
-        print('\tadvance_bases')
+        #print('\tadvance_bases')
         if self.bases['third']!= None:
             self.out=self.bases['third'].run()
             if self.out:
@@ -82,7 +82,7 @@ class Game:
             self.bases['first']= None
 
     def hit(self,player):
-        print('\thit')
+        #print('\thit')
         x= math.floor(random.randrange(0,5)+player.skill)
         self.advance_bases()
         match x:
@@ -118,7 +118,7 @@ class Game:
                 return 'HOME RUN!!'
 
     def ball(self, player):
-        print('\tball')
+        #print('\tball')
         pitch=random.randrange(0,5)
         match pitch:
             case 0:
@@ -141,7 +141,18 @@ class Game:
                 self.balls=self.balls+1
                 if self.balls==4:
                     self.on_base=True
+                    
                 return self.outcomes[4]
+                
+                
+    def walk(self, player):
+    	if self.bases['first'] == None:
+    		self.bases['first'] = player
+    		player.on_base=1
+    	elif self.bases['second'] == None:
+    		self.bases['second'] = self.bases['first']
+    		self.bases['first'] = player
+    	elif self.bases['third'] == None:
             
 
 
