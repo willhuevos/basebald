@@ -1,9 +1,13 @@
 TODO:
-    ☐ hit chance logic
-    ✔ 'ball' logic @done(24-03-07 10:21)
+
+    ☐ 'ball' logic (walks)
+    ☐ base running logic
+
+
+Could Have:
     ☐ player skills
     ☐ separate pitchers?
-    ☐ base running logic
+    ☐ better hit chance logic
     ☐ position logic
 
 ISSUES:

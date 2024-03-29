@@ -51,7 +51,7 @@ for inning in range(INNINGS):
     while g.players_out() < OUTS:
         # print('balls='+str(g.check_balls())+'strikes='+ str(g.check_strikes())+'onbase='+str(g.check_onbase())+'outs='+str(g.players_out()))
         while g.check_balls() < 4 and g.check_strikes() < 3 and not g.check_out() and not g.check_onbase():
-            print(awayTeam[awayBatter].name + ' '+ g.ball(awayTeam[awayBatter]))
+            print(awayTeam[awayBatter].name + ' '+ g.pitch(awayTeam[awayBatter]))
         g.end_at_bat()
         awayBatter=awayBatter+1
         if awayBatter > TEAMSIZE-1:
