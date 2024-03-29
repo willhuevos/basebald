@@ -58,6 +58,8 @@ for inning in range(INNINGS):
             awayBatter=0
     reset_bases()
     
+    
+    
     print('\nHome team at the plate.\n')
     while g.players_out() < OUTS:
         while g.check_balls() < 4 and g.check_strikes() < 3 and not g.check_out() and not g.check_onbase():
