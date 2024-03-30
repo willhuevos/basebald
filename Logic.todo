@@ -1,7 +1,15 @@
 TODO:
 
-    ☐ 'ball' logic (walks)
-    ☐ base running logic
+    ✔ 'ball' logic (walks) @done(24-03-30 10:04)
+    ✔ after an at bat, display bases @done(24-03-30 11:49)
+    ✔ in an at bat, display balls - strikes @done(24-03-30 12:44)
+    ☐ multiple people on base
+        - check logic sequence
+    ☐ players overtaking on base
+        - if players are in front, they need to advance the same amount
+    ✔ after game, display scores and winner @done(24-03-30 12:44)
+    ✔ note 'blah is out', when a player is out @done(24-03-30 12:44)
+    ☐ make speed control (multiples on sleep funtions)
 
 
 Could Have:

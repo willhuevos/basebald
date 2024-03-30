@@ -4,7 +4,7 @@ import player
 
 class Game:
     def __init__(self):
-        self.outcomes=['hit','strike, looking','strike, swinging','foul','ball']
+        self.outcomes=['hit','Strike, looking.','Strike, swinging.','Foul','Ball']
         self.balls=0
         self.strikes=0
         self.player_outs=0
@@ -39,6 +39,7 @@ class Game:
         self.out=False
         self.on_base=False
 
+
     def half_inning(self):
         self.player_outs=0
         self.bases={
@@ -46,15 +47,36 @@ class Game:
             "second":None,
             "third":None,
         }
+    def print_gamestate(self,team):
+        OUTS=['','X','X X','X X X']
+        bases=[' ',' ',' ']
+        bases[0] = ' ' if self.bases['first']==None else 'X'
+        bases[1] = ' ' if self.bases['second']==None else 'X'
+        bases[2] = ' ' if self.bases['third']==None else 'X'
+
+        print('__________________')
+        print('        _')
+        print('       |'+bases[1]+'|')
+        print('    _       _')
+        print('   |'+bases[2]+'|     |'+bases[0]+'|')
+        print('------------------')
+        print('OUT: '+OUTS[self.players_out()])
+        match team:
+            case 'away':
+                print('Home - '+ str(self.home_score) +'  '+ str(self.away_score)+' - AWAY')
+            case 'home':
+                print('HOME - '+ str(self.home_score) +'  '+ str(self.away_score)+' - Away')
+        print('------------------')
 
     def advance_bases(self):
         #print('\tadvance_bases')
+        message=''
         if self.bases['third']!= None:
             self.out=self.bases['third'].run()
             if self.out:
-                print(self.bases['third'].name + ' is out at 3rd.')
+                message+=self.bases['third'].name + ' is out at 3rd. '
             else:
-                print(self.bases['third'].name + ' made it home!')
+                message+=self.bases['third'].name + ' made it home! '
                 if self.bases['third'].team=='away':
                     self.away_score=self.away_score+1
                 else:
@@ -64,95 +86,131 @@ class Game:
         if self.bases['second']!= None:
             self.out=self.bases['second'].run()
             if self.out:
-                print(self.bases['second'].name + ' is out at 2nd.')
+                message+=self.bases['second'].name + ' is out at 2nd. '
             else:
-                print(self.bases['second'].name + ' made it to third base.')
-            
-            self.bases['third']=self.bases['second']
+                message+=self.bases['second'].name + ' made it to third base.'
+                self.bases['third']=self.bases['second']
             self.bases['second']= None
 
         if self.bases['first']!= None:
             self.out=self.bases['first'].run()
             if self.out:
-                print(self.bases['first'].name + ' is out at 1st.')
+                message+=self.bases['first'].name + ' is out at 1st. '
             else:
-                print(self.bases['first'].name + ' made it to second base.')
-            
-            self.bases['second']=self.bases['first']
+                message+=self.bases['first'].name + ' made it to second base. '
+                self.bases['second']=self.bases['first']
             self.bases['first']= None
+        return message
 
     def hit(self,player):
         #print('\thit')
+        message=''
         x= math.floor(random.randrange(0,5)+player.skill)
-        self.advance_bases()
         match x:
             case 0:
                 self.out=True
                 self.player_outs=self.player_outs+1
-                return 'HIT... ground out.'
+                if self.player_outs <3:
+                    message=self.advance_bases()
+                return 'HIT... ground out. '+message
+ 
             case 1:
                 self.out=True
                 self.player_outs=self.player_outs+1
-                return 'HIT!! ....but caught out'
+                return 'HIT!! ....but caught out. '
             case 2:
-                player.on_base=1
+                message=self.advance_bases()
+
                 self.on_base=True
                 self.bases['first']=player
-                return 'BASE HIT!!'
+                return 'BASE HIT!! '+message
             case 3:
-                player.on_base=2
+                message=self.advance_bases()
                 self.on_base=True
                 self.bases['second']=player
-                return 'IT\'S A DOUBLE!'
+                return 'Hit for a DOUBLE! '+message
             case 4:
-                player.on_base=3
+                message=self.advance_bases()
                 self.on_base=True
                 self.bases['third']=player
-                return 'IT\'S A TRIPLE!'
+                return 'Hit for a TRIPLE! '+message
             case 5:
+                message=self.advance_bases()
                 self.on_base=True
                 if player.team=='away':
                     self.away_score=self.away_score+1
                 else:
                     self.home_score=self.home_score+1
-                return 'HOME RUN!!'
+                return 'HOME RUN!! '+message
 
-    def ball(self, player):
+    def walk(self, player):
+        if self.bases['first'] == None:
+            self.bases['first'] = player
+            return str('\n'+self.bases['first'].name + ' walks to first.')
+        elif self.bases['second'] == None:
+            self.bases['second'] = self.bases['first']
+            self.bases['first'] = player
+            return str('\n'+self.bases['first'].name + ' walks to first. \n'+self.bases['second'].name+ ' walks to second.')
+        elif self.bases['third'] == None:
+            self.bases['third'] = self.bases['second']
+            self.bases['second'] = self.bases['first']
+            self.bases['first'] = player
+
+            return str('\n'+self.bases['first'].name + ' walks to first. \n'+self.bases['second'].name+ ' walks to second. \n'+self.bases['second'].name + ' walks to third.')
+  
+        else:
+            match str(self.bases['third'].team):
+                case 'home':
+                    self.home_score+=1
+                case 'away':
+                    self.away_score+=1
+            old_third =self.bases['third'].name
+            self.bases['third'] = self.bases['second']
+            self.bases['second'] = self.bases['first']
+            self.bases['first'] = player
+            self.bases['first'].on_base=1
+            self.bases['second'].on_base = 2
+            self.bases['third'].on_base = 3
+            return str('\n'+old_third + 'walks home!\n'+self.bases['first'].name + ' walks to first. \n'+self.bases['second'].name+ ' walks to second. \n'+self.bases['second'].name + ' walks to third.')
+
+    def pitch(self, player):
+        message=''
         #print('\tball')
+        #['hit','strike, looking','strike, swinging','foul','ball']
         pitch=random.randrange(0,5)
         match pitch:
             case 0:
                 return self.hit(player) 
             case 1:
                 self.strikes=self.strikes+1
+                message=' '+str(self.balls)+' - '+str(self.strikes)
                 if self.strikes == 3:
                     self.player_outs=self.player_outs+1
-                return self.outcomes[1]
+                    message='\n'+player.name+' is OUT'
+                return self.outcomes[1]+message
             case 2:
                 self.strikes=self.strikes+1
+                message=' '+str(self.balls)+' - '+str(self.strikes)
                 if self.strikes == 3:
                     self.player_outs=self.player_outs+1
-                return self.outcomes[2]
+                    message='\n'+player.name+' is OUT'
+                return self.outcomes[2]+message
             case 3:
+                
                 if self.strikes < 2:
-                    self.balls=self.balls+1
-                return self.outcomes[3]
+                    self.strikes+=1
+                message=' '+str(self.balls)+' - '+str(self.strikes)
+                return self.outcomes[3]+message
             case 4:
                 self.balls=self.balls+1
+                message=' '+str(self.balls)+' - '+str(self.strikes)
                 if self.balls==4:
                     self.on_base=True
-                    
-                return self.outcomes[4]
+                    message=self.walk(player)
+                return self.outcomes[4]+message
                 
                 
-    def walk(self, player):
-    	if self.bases['first'] == None:
-    		self.bases['first'] = player
-    		player.on_base=1
-    	elif self.bases['second'] == None:
-    		self.bases['second'] = self.bases['first']
-    		self.bases['first'] = player
-    	elif self.bases['third'] == None:
+
             
 
 

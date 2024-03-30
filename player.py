@@ -5,7 +5,6 @@ class Player:
     def __init__(self,team):
         self.name=self.generate_name()
         self.skill=random.random()
-        self.on_base=0
         self.team=team
 
     def generate_name(self):
