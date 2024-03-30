@@ -116,7 +116,7 @@ for inning in range(INNINGS):
     reset_bases()
 
     if inning < 8:
-        print('End of inning!\n')
+        print('End of inning '+str(inning+1)+'!\n')
         print('Home - '+ str(g.home_score) +'  '+ str(g.away_score)+' - Away\n')
         input('Press a key to continue...\n')
         os.system('cls')
