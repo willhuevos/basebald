@@ -21,11 +21,21 @@ awayTeam=teamgen.generate_team('away')
 # Counters
 homeBatter=0
 awayBatter=0
-out=False
 
 # Helpers
 def reset_bases():
     g.half_inning()
+
+def average_pbr(team):
+    average_p=0
+    average_b=0
+    average_r=0
+    for x in range(TEAMSIZE):
+        average_p+=team[x].pitching
+        average_b+=team[x].batting
+        average_r+=team[x].running
+    return 'P: '+str(f"{average_p/TEAMSIZE:.2f}")+'| B: '+str(f"{average_b/TEAMSIZE:.2f}")+'| R: '+str(f"{average_r/TEAMSIZE:.2f}")
+
 
 def print_end_stats():
     print('GAME OVER!')
@@ -41,14 +51,25 @@ def print_end_stats():
 print('\t\t---------')
 print('\t\tBASEBALD!')
 print('\t\t---------\n')
-print('Home Team\t\t\tAway Team')
-print('---------\t\t\t---------')
-print()
+print('Home Team\t\tAverage PBR - '+ average_pbr(homeTeam))
+print('---------\n')
+
 for x in range(TEAMSIZE):
     if(len(homeTeam[x].name) < 16):
-        print(homeTeam[x].name+'\t\t\t'+awayTeam[x].name)
+        print(homeTeam[x].name+'\t\t\tP: '+homeTeam[x].get_pitching()+'| B: '+homeTeam[x].get_batting()+'| R: '+homeTeam[x].get_running())
     else:
-        print(homeTeam[x].name+'\t\t'+awayTeam[x].name)
+        print(homeTeam[x].name+'\t\tP: '+homeTeam[x].get_pitching()+'| B: '+homeTeam[x].get_batting()+'| R: '+homeTeam[x].get_running())
+
+input('\n\n\tPress Enter for Away Team\n')
+os.system('cls')
+
+print('Away Team\t\tAverage PBR - '+ average_pbr(awayTeam))
+print('---------\n')
+for x in range(TEAMSIZE):
+    if(len(homeTeam[x].name) < 16):
+        print(awayTeam[x].name+'\t\t\tP: '+awayTeam[x].get_pitching()+' B: '+awayTeam[x].get_batting()+' R: '+awayTeam[x].get_running())
+    else:
+        print(awayTeam[x].name+'\t\tP: '+awayTeam[x].get_pitching()+' B: '+awayTeam[x].get_batting()+' R: '+awayTeam[x].get_running())
 
 input('\n\n\tPress a key to Start...\n')
 os.system('cls')
@@ -65,7 +86,7 @@ for inning in range(INNINGS):
     os.system('cls')
 
     while g.players_out() < OUTS:
-        print(awayTeam[awayBatter].name + ' is up.')
+        print(awayTeam[awayBatter].name + ' is up. '+awayTeam[awayBatter].check_hair())
         time.sleep(2)
 
         while g.check_balls() < 4 and g.check_strikes() < 3 and not g.check_out() and not g.check_onbase():
@@ -93,7 +114,7 @@ for inning in range(INNINGS):
     os.system('cls')
 
     while g.players_out() < OUTS:
-        print(homeTeam[homeBatter].name + ' is up.')
+        print(homeTeam[homeBatter].name + ' is up. '+homeTeam[homeBatter].check_hair())
         time.sleep(2)
 
         while g.check_balls() < 4 and g.check_strikes() < 3 and not g.check_out() and not g.check_onbase():
