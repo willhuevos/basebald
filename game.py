@@ -25,7 +25,7 @@ class Game:
     
     def check_onbase(self):
         return self.on_base
-    
+
     def players_out(self):
         return self.player_outs
 
@@ -43,7 +43,6 @@ class Game:
                 return 'second'
             case 3:
                 return 'third'
-
 
     def half_inning(self):
         self.player_outs=0
@@ -106,7 +105,6 @@ class Game:
                         message+=self.bases[x].name+' is out at'+str(self.base_numbers(x))+'. '
         return message
             
-
     def hit(self,player):
         #print('\thit')
         message=''
